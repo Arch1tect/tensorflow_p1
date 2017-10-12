@@ -110,6 +110,8 @@ class fc(object):
 		# You will probably need to reshape (flatten) the input features.           #
 		# Store the results in the variable output provided above.                  #
 		#############################################################################
+		# output = feat.reshape(feat.shape[0])
+		output = feat.reshape(feat.shape[0], self.params[self.w_name].shape[0]).dot(self.params[self.w_name]) + self.params[self.b_name]
 
 		#############################################################################
 		#                             END OF YOUR CODE                              #
@@ -130,6 +132,9 @@ class fc(object):
 		# corresponding name.                                                       # 
 		#############################################################################
 
+		dfeat = dprev.dot(self.params[self.w_name].T).reshape(feat.shape)
+		self.grads[self.w_name] = feat.reshape(feat.shape[0], self.params[self.w_name].shape[0]).T.dot(dprev)
+		self.grads[self.b_name] = np.sum(dprev, axis=0)
 		#############################################################################
 		#                             END OF YOUR CODE                              #
 		#############################################################################
