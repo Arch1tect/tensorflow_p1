@@ -161,7 +161,8 @@ class relu(object):
 		# TODO: Implement the forward pass of a rectified linear unit               #
 		# Store the results in the variable output provided above.                  #
 		#############################################################################
-
+		relu_function = lambda x: x * (x > 0).astype(float)
+		output = relu_function(feat)
 		#############################################################################
 		#                             END OF YOUR CODE                              #
 		#############################################################################
@@ -177,7 +178,7 @@ class relu(object):
 		#############################################################################
 		# TODO: Implement the backward pass of a rectified linear unit              #
 		#############################################################################
-
+		dfeat = dprev * (feat >= 0)
 		#############################################################################
 		#                             END OF YOUR CODE                              #
 		#############################################################################
@@ -214,6 +215,12 @@ class dropout(object):
 		#############################################################################
 		# TODO: Implement the forward pass of Dropout                               #
 		#############################################################################
+		if is_Training:
+			mask = (np.random.rand(*feat.shape) < self.p) / self.p
+			output = feat * mask
+			dropped = mask
+		else:
+			output = feat
 
 		#############################################################################
 		#                             END OF YOUR CODE                              #
@@ -231,7 +238,10 @@ class dropout(object):
 		#############################################################################
 		# TODO: Implement the backward pass of Dropout                              #
 		#############################################################################
-
+		if self.is_Training:
+			dfeat = dprev * self.dropped
+		else:
+			dfeat = dprev
 		#############################################################################
 		#                             END OF YOUR CODE                              #
 		#############################################################################
